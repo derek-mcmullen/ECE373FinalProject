@@ -19,10 +19,7 @@ public class Coordinator extends User {
 		this.organization = aOrg; 
 	}
 	
-	public void addMessageToOutbox(Message aMessage) {
-		this.outbox.add(aMessage);
-		aMessage.setFromField(this);
-	}
+
 	
 	public void prepareEvent(Event aEvent, Date startTime, Date stopTime) { 
 		
@@ -45,7 +42,7 @@ public class Coordinator extends User {
 			if ((aTS.getStartTime().getTime() >= event.getTime().getStopTime().getTime()) || (aTS.getStopTime().getTime() <= event.getTime().getStartTime().getTime()) ) {
 				// Do nothing
 			} else { 
-				System.out.println("The event '" + aEvent.getTitle() + "' has a time conflict with '" + event.getTitle() + "'");
+				System.out.println("The event '" + aEvent.getTitle() + "' cannot be created on " + aTS.getStartTime() + " b/c it has a time conflict with '" + event.getTitle() + "'");
 				isDuplicate = true; 
 			}
 		}

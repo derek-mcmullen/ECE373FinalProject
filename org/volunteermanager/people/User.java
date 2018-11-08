@@ -11,7 +11,7 @@ public abstract class User {
 	private String name; 
 	private ArrayList<Message> inbox; 
 	protected ArrayList<Message> outbox; 
-	private ArrayList<Event> events; 
+	protected ArrayList<Event> events; 
 	
 	public User() { 
 		userName = ""; 
@@ -56,7 +56,10 @@ public abstract class User {
 	public ArrayList<Message> getOutbox() {
 		return outbox;
 	}
-	public abstract void addMessageToOutbox(Message aMessage); 
+	public void addMessageToOutbox(Message aMessage) {
+		this.outbox.add(aMessage);
+		aMessage.setFromField(this);
+	}
 	
 	public ArrayList<Event> getEvents() {
 		return events;

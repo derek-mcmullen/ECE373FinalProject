@@ -50,6 +50,31 @@ public class ManagementSystem {
 		supportedInterests.add(aInterest); 
 	}
 
+	public ArrayList<Event> getEventsBySkill(String aSkill) { 
+		ArrayList<Event> eventsBySkill = new ArrayList<Event>(); 
+		
+		for (Event evt : events) { 
+			for (String skillReq : evt.getRequiredSkills()) { 
+				if (skillReq.equals(aSkill)) { 
+					eventsBySkill.add(evt); 
+				}
+			}
+		}
+		return eventsBySkill; 
+	}
+	
+	public ArrayList<Event> getEventsByInterest(String aInterest) { 
+		ArrayList<Event> eventsByInterest = new ArrayList<Event>(); 
+		
+		for (Event evt : events) { 
+			for (String interest : evt.getInterestCategory()) { 
+				if (interest.equals(aInterest)) { 
+					eventsByInterest.add(evt); 
+				}
+			}
+		}
+		return eventsByInterest; 
+	}
 
 	
 	

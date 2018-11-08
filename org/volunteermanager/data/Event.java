@@ -55,10 +55,6 @@ public class Event {
 		return roster;
 	}
 
-	public void setRoster(ArrayList<Volunteer> roster) {
-		this.roster = roster;
-	}
-
 	public Coordinator getCoordinator() {
 		return coordinator;
 	}

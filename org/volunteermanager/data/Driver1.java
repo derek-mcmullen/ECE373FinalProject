@@ -100,18 +100,21 @@ public class Driver1 {
 		e1.addRequiredSkill("Power Tools");
 		e1.addExtraInfo("Free Pizza");
 		e1.addInterestCategory("Construction");
+		ms1.addEvent(e1);
 
 		e2.setTitle("Get Out The Vote");
 		e2.setEventId(2);
 		e2.setLocation("Downtown");
 		e2.addRequiredSkill("Public Speaking");
 		e2.addInterestCategory("Politics");
+		ms1.addEvent(e2); 
 		
 		e3.setTitle("Community Lecture - Programming 101");
 		e3.setEventId(3);
 		e3.setLocation("University of Arizona");
 		e3.addExtraInfo("Learning Java has never been so easy!");
 		e3.addInterestCategory("Education");
+		ms1.addEvent(e3); 
 		
 		e4.setTitle("Holiday Party Childcare");
 		e4.setEventId(4);
@@ -119,12 +122,40 @@ public class Driver1 {
 		e4.addRequiredSkill("Childcare");
 		e4.addRequiredSkill("Public Speaking");
 		e4.addInterestCategory("Children");
+		ms1.addEvent(e4); 
 		
+		// Conflicting event time slots
+		System.out.println("\nTesting create events with time slot conflicts:");
+		System.out.println("-----------------------------------------------");	
 		
+		Date startTime1 = new Date("11/20/2018 10:00"); 
+		Date stopTime1 = new Date("11/20/2018 12:00"); 
+		t1.setStartTime(startTime1);
+		t1.setStopTime(stopTime1);
+		Date startTime2 = new Date("11/20/2018 11:00"); 
+		Date stopTime2 = new Date("11/20/2018 13:00"); 
+		t2.setStartTime(startTime2);
+		t2.setStopTime(stopTime2);
+		Date startTime3 = new Date("11/20/2018 12:00"); 
+		Date stopTime3 = new Date("11/20/2018 14:00"); 	
+		t3.setStartTime(startTime3);
+		t3.setStopTime(stopTime3);
+		Date startTime4 = new Date("12/07/2018 15:00"); 
+		Date stopTime4 = new Date("12/07/2018 18:00"); 
+		t4.setStartTime(startTime4);
+		t4.setStopTime(stopTime4);
 		
-		/* Testing Conflict Scenarios */
-		System.out.println("Testing skill requirement conflicts: ");
-		System.out.println("------------------------------------ ");
+		c1.prepareEvent(e1, startTime1, stopTime1);
+		c2.prepareEvent(e2, startTime2, stopTime2); 	
+		c3.prepareEvent(e3, startTime3, stopTime3); 
+		
+		c2.prepareEvent(e4, startTime1, stopTime1);			// conflict exists
+		c2.prepareEvent(e4, startTime3, stopTime3); 		// conflict exists
+		c2.prepareEvent(e4, startTime4, stopTime4);
+		
+	/* Testing Conflict Scenarios */
+		System.out.println("\nTesting skill requirement and schedule conflicts for join event: ");
+		System.out.println("---------------------------------------------------------------- ");
 		
 		// Conflicting skill requirements
 		v1.joinEvent(e1);        // This one is good
@@ -144,34 +175,15 @@ public class Driver1 {
 		
 		// Two requirements event, v2 only matches one of the 2 required 
 		v2.joinEvent(e4);        // This one is bad
-		v4.joinEvent(e4);        // This one is good
+		v4.joinEvent(e4);        // This one is good	
+
 		
 		
+	/* Testing message functions */
+		System.out.println("\nTesting message send error checks:");
+		System.out.println("----------------------------------");
 		
-		// Conflicting event time slots
-		System.out.println("\nTesting time slot conflicts:");
-		System.out.println("----------------------------");
-		
-		Date startTime1 = new Date("11/20/2018 10:00"); 
-		Date stopTime1 = new Date("11/20/2018 12:00"); 
-		Date startTime2 = new Date("11/20/2018 11:00"); 
-		Date stopTime2 = new Date("11/20/2018 13:00"); 
-		Date startTime3 = new Date("11/20/2018 12:00"); 
-		Date stopTime3 = new Date("11/20/2018 14:00"); 
-		
-		c1.prepareEvent(e1, startTime1, stopTime1);
-		c2.prepareEvent(e2, startTime2, stopTime2); 	
-		c3.prepareEvent(e3, startTime3, stopTime3); 		
-		
-		c2.prepareEvent(e1, startTime1, stopTime1);			// conflict exists
-		c2.prepareEvent(e3, startTime3, stopTime3); 		// conflict exists
-		
-		
-		// Try sending some messages
-		System.out.println("\nTesting message transfer");
-		System.out.println("------------------------");
-		
-		// sending message to everyone in the to field 
+		// 2 messages for sending message to everyone in the to field 
 		m1.addToField(v1);
 		m1.addToField(v2);
 		m1.setFromField(c1);
@@ -183,7 +195,7 @@ public class Driver1 {
 		m2.setBody("Since there is no to field there will be no one to receive this message.");
 		m2.setFromField(c2);
 		
-		// Sending message to everyone connected to event
+		// 2 messages for sending messages to everyone connected to the event
 		m3.setEvent(e3); 
 		m3.setFromField(c3); 
 		m3.setTitle("Test message for event sending");
@@ -196,19 +208,110 @@ public class Driver1 {
 		m4.setFromField(c3);
 		m4.setEvent(e4); 			// should only reach v4
 		
-		
-		m1.sendMessageToAddressed();
+		// Send the prepared messages
+		m1.sendMessageToAddressed();			
 		m2.sendMessageToAddressed();
 		m3.sendMessageToEventMembers();
 		m4.sendMessageToEventMembers();
 		
+		System.out.println("\nChecking Inbox message counts:");
+		System.out.println("------------------------------");
 		
 		// Check if correct recipients
 		System.out.println(v1.getName() + " should have 2 messages. The inbox has: " + v1.getInbox().size() + " messages.");
 		System.out.println(v2.getName() + " should have 2 messages. The inbox has: " + v2.getInbox().size() + " messages.");
 		System.out.println(v3.getName() + " should have 1 message. The inbox has: " + v3.getInbox().size() + " messages.");
-		System.out.println(v4.getName() + " should have 2 messages. The inbox has: " + v4.getInbox().size() + " messages.");
+		System.out.println(v4.getName() + " should have 1 message. The inbox has: " + v4.getInbox().size() + " messages.");
 		
-		//TODO: need to add some roster verification and print schedule stuff to show that we have whats expected
+	/* Print each volunteers schedules */
+		System.out.println("\nPrinting the event rosters:");
+		System.out.println("---------------------------");
+		for (Event evt : v1.getEvents()) { 
+			System.out.println(v1.getName() + " is signed up for an event on " + evt.getTime().getStartTime() + " named: '" + evt.getTitle() + "'");
+		}
+		for (Event evt : v2.getEvents()) { 
+			System.out.println(v2.getName() + " is signed up for an event on " + evt.getTime().getStartTime() + " named: '" + evt.getTitle() + "'");
+		}
+		for (Event evt : v3.getEvents()) { 
+			System.out.println(v3.getName() + " is signed up for an event on " + evt.getTime().getStartTime() + " named: '" + evt.getTitle() + "'");
+		}
+		for (Event evt : v4.getEvents()) { 
+			System.out.println(v4.getName() + " is signed up for an event on " + evt.getTime().getStartTime() + " named: '" + evt.getTitle() + "'");
+		}
+			
+	/* Testing leaving event conflicts */
+		System.out.println("\nTesting leave event conflict checking:");
+		System.out.println("---------------------------------------");
+				
+		v1.leaveEvent(e2); 		// not enrolled in this
+		v1.leaveEvent(e3); 		// is enrolled in this
+		v3.leaveEvent(e1); 		// is enrolled in this
+		v3.leaveEvent(e4); 		// not enrolled in this
+		v4.leaveEvent(e1); 		// not enrolled in this
+		v4.leaveEvent(e2); 		// is enrolled in this
+
+	
+	/* Print each volunteers schedules again */
+		System.out.println("\nPrinting the event rosters (after leaves - each vol should have 1 remaining event):");
+		System.out.println("-----------------------------------------------------------------------------------");
+		for (Event evt : v1.getEvents()) { 
+			System.out.println(v1.getName() + " is signed up for an event on " + evt.getTime().getStartTime() + " named: '" + evt.getTitle() + "'");
+		}
+		for (Event evt : v2.getEvents()) { 
+			System.out.println(v2.getName() + " is signed up for an event on " + evt.getTime().getStartTime() + " named: '" + evt.getTitle() + "'");
+		}
+		for (Event evt : v3.getEvents()) { 
+			System.out.println(v3.getName() + " is signed up for an event on " + evt.getTime().getStartTime() + " named: '" + evt.getTitle() + "'");
+		}
+		for (Event evt : v4.getEvents()) { 
+			System.out.println(v4.getName() + " is signed up for an event on " + evt.getTime().getStartTime() + " named: '" + evt.getTitle() + "'");
+		}
+	
+	/* Print the events by interest and skill req */
+		System.out.println("\nPrinting events by interest category:");
+		System.out.println("-------------------------------------");		
+		
+		// By interest category
+		ArrayList<Event> events = new ArrayList<Event>(); 
+		events = ms1.getEventsByInterest("Construction"); 
+		System.out.println("Interest Category: 'Construction'");
+		for (Event evt : events) {
+			System.out.println("    -> " + evt.getTitle());
+		}
+		events = ms1.getEventsByInterest("Politics"); 
+		System.out.println("Interest Category: 'Politics'");
+		for (Event evt : events) {
+			System.out.println("    -> " + evt.getTitle());
+		}
+		events = ms1.getEventsByInterest("Education"); 
+		System.out.println("Interest Category: 'Education'");
+		for (Event evt : events) {
+			System.out.println("    -> " + evt.getTitle());
+		}
+		events = ms1.getEventsByInterest("Children"); 
+		System.out.println("Interest Category: 'Children'");
+		for (Event evt : events) {
+			System.out.println("    -> " + evt.getTitle());
+		}
+		
+		System.out.println("\nPrinting events by skill requirement:");
+		System.out.println("-------------------------------------");	
+		// By skill req
+		events = ms1.getEventsBySkill("Power Tools"); 
+		System.out.println("Skill Required: 'Power Tools'");
+		for (Event evt : events) {
+			System.out.println("    -> " + evt.getTitle());
+		}
+		events = ms1.getEventsBySkill("Public Speaking"); 
+		System.out.println("Skill Required: 'Public Speaking'");
+		for (Event evt : events) {
+			System.out.println("    -> " + evt.getTitle());
+		}
+		events = ms1.getEventsBySkill("Childcare"); 
+		System.out.println("Skill Required: 'Childcare'");
+		for (Event evt : events) {
+			System.out.println("    -> " + evt.getTitle());
+		}
 	}
+	
 }
