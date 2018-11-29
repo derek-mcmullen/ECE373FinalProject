@@ -89,6 +89,7 @@ public class Driver2 {
 		e1.addRequiredSkill("Power Tools");
 		e1.addExtraInfo("Free Pizza");
 		e1.addInterestCategory("Construction");
+		e1.setCoordinator(c1);
 
 		e2.setTitle("Get Out The Vote");
 		e2.setCoordinator(c2);
@@ -96,6 +97,7 @@ public class Driver2 {
 		e2.setLocation("Downtown");
 		e2.addRequiredSkill("Public Speaking");
 		e2.addInterestCategory("Politics");
+		e2.setCoordinator(c2);
 		
 		e3.setTitle("Community Lecture - Programming 101");
 		e3.setCoordinator(c3);
@@ -103,6 +105,7 @@ public class Driver2 {
 		e3.setLocation("University of Arizona");
 		e3.addExtraInfo("Learning Java has never been so easy!");
 		e3.addInterestCategory("Education");
+		e3.setCoordinator(c3);
 		
 		e4.setTitle("Holiday Party Childcare");
 		e4.setCoordinator(c3); 
@@ -111,6 +114,7 @@ public class Driver2 {
 		e4.addRequiredSkill("Childcare");
 		e4.addRequiredSkill("Public Speaking");
 		e4.addInterestCategory("Children");
+		e4.setCoordinator(c3);
 		
 		m1.addToField(v1);
 		m1.addToField(v2);
