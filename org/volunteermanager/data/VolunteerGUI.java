@@ -10,7 +10,6 @@ import org.volunteermanager.people.*;
 
 public class VolunteerGUI extends JFrame{
 	 
-//public class TabbedPaneDemo extends JPanel {
     public VolunteerGUI() {
     	// GUI Title and size
     	setTitle("Volunteer Management System"); 
