@@ -83,6 +83,7 @@ public class Driver2 {
 		
 		// Set base attributes of events
 		e1.setTitle("Building a House");
+		e1.setCoordinator(c1);
 		e1.setEventId(1);
 		e1.setLocation("1234 Eastside St.");
 		e1.addRequiredSkill("Power Tools");
@@ -90,18 +91,21 @@ public class Driver2 {
 		e1.addInterestCategory("Construction");
 
 		e2.setTitle("Get Out The Vote");
+		e2.setCoordinator(c2);
 		e2.setEventId(2);
 		e2.setLocation("Downtown");
 		e2.addRequiredSkill("Public Speaking");
 		e2.addInterestCategory("Politics");
 		
 		e3.setTitle("Community Lecture - Programming 101");
+		e3.setCoordinator(c3);
 		e3.setEventId(3);
 		e3.setLocation("University of Arizona");
 		e3.addExtraInfo("Learning Java has never been so easy!");
 		e3.addInterestCategory("Education");
 		
 		e4.setTitle("Holiday Party Childcare");
+		e4.setCoordinator(c3); 
 		e4.setEventId(4);
 		e4.setLocation("Raytheon Christmas Party");
 		e4.addRequiredSkill("Childcare");
@@ -349,15 +353,15 @@ public class Driver2 {
 			System.out.println("Location: " + e.getLocation());
 			System.out.println("Required Skills:");
 			for (String skill : e.getRequiredSkills()) {
-				System.out.println(skill);
+				System.out.println("-" + skill);
 			}
 			System.out.println("Interests:");
 			for (String inter : e.getInterestCategory()) {
-				System.out.println(inter);
+				System.out.println("-" + inter);
 			}
 			System.out.println("Extra Info:");
 			for (String info : e.getExtraInfo()) {
-				System.out.println(info);
+				System.out.println("-" + info);
 			}
 			System.out.println();
 		}
@@ -383,15 +387,15 @@ public class Driver2 {
 			System.out.println("Location: " + e.getLocation());
 			System.out.println("Required Skills:");
 			for (String skill : e.getRequiredSkills()) {
-				System.out.println(skill);
+				System.out.println("-" + skill);
 			}
 			System.out.println("Interests:");
 			for (String inter : e.getInterestCategory()) {
-				System.out.println(inter);
+				System.out.println("-" + inter);
 			}
 			System.out.println("Extra Info:");
 			for (String info : e.getExtraInfo()) {
-				System.out.println(info);
+				System.out.println("-" + info);
 			}
 			System.out.println();
 		}
