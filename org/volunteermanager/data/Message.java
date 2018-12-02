@@ -14,7 +14,7 @@ public class Message {
 	public Message() { 
 		title = ""; 
 		toField = new ArrayList<User>(); 
-		event = new Event(); 
+		//event = new Event(); 
 		body = ""; 
 	}
 	

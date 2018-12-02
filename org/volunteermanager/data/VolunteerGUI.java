@@ -39,14 +39,16 @@ public class VolunteerGUI extends JFrame{
 
     	JPanel createPanel = new JPanel(new GridLayout(4, 2));
     	JPanel profilePanel = new JPanel();
-    	JPanel messagingPanel = new JPanel(); 
+       JPanel messagingPanel = new JPanel(new GridLayout(0,2, 0,15)); 
+       JScrollPane messagingPane = new JScrollPane( messagingPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,  JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+       messagingPane.setPreferredSize(new Dimension(500, 500));
     		
     	// Adding the tabs to the navbar
     	jtp.addTab("Join Events", joinPane);
     	jtp.addTab("Create Events", createPanel);
     	jtp.addTab("My Events", eventsPane);
     	jtp.addTab("View Profile", profilePanel);
-    	jtp.addTab("Messaging", messagingPanel);
+    	jtp.addTab("Messaging", messagingPane);
     	
     /* ------	PANEL IMPLEMENTATIONS BELOW   ------ */
     	
@@ -100,11 +102,33 @@ public class VolunteerGUI extends JFrame{
     	
     	
 	    
-		// Messaging panel implementation 
-    	JButton test = new JButton("Send Message");
-    	messagingPanel.add(test);
+      // Messaging panel implementation 
+      for(Message m: currentUser.getInbox()){
+         JTextArea label = new JTextArea();
+         JButton info = new JButton("Open");
+         JPanel buttonContainer = new JPanel();
+         
+         label.setText(m.getTitle()+"\n   "+m.getFromField().getName());
+         label.setLineWrap(true);
+         label.setWrapStyleWord(true);
+         label.setEditable(false);
+         label.setFocusable(false);
+         label.setOpaque(false);
+         //label.setPreferredSize(new Dimension(0,20));
+         label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+         label.setMaximumSize(new Dimension(0,20));
 
-      test.addActionListener(bhandler);
+         buttonContainer.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+         info.addActionListener(new messageHandler(m));
+         
+         messagingPanel.add(label);
+         buttonContainer.add(info);
+         messagingPanel.add(buttonContainer);
+      }
+    	//JButton test = new JButton("Send Message");
+    	//messagingPanel.add(test);
+
+      //test.addActionListener(bhandler);
        
        // Events panel implementation 
       jtp.addChangeListener(new ChangeListener() {
@@ -222,6 +246,28 @@ public class VolunteerGUI extends JFrame{
           JOptionPane.showMessageDialog(null, "You are a coordinator.\nOnly volunteers can join events.", "Error", JOptionPane.ERROR_MESSAGE);
          }
       } 
+    }
+    class messageHandler implements ActionListener{
+       Message message;
+      public messageHandler(Message m){
+         this.message=m;
+      }
+      public void actionPerformed(ActionEvent e){
+         String display = "From: "+message.getFromField().getName()+"\n";
+         if(message.getEvent()!=null){
+            display+="Event: "+message.getEvent().getTitle()+"\n";
+         }
+         display += "\n"+message.getBody();
+         JTextArea label = new JTextArea(display);
+         label.setLineWrap(true);
+		    	label.setWrapStyleWord(true);
+		    	label.setEditable(false);
+             label.setFocusable(false);
+             label.setColumns(75);
+             label.setRows(display.length()/80+3);
+             label.setOpaque(false);
+         JOptionPane.showMessageDialog(null, label, message.getTitle(), JOptionPane.INFORMATION_MESSAGE);
+      }
     }
     class ButtonHandler implements ActionListener{
     	public void actionPerformed(ActionEvent e){
@@ -370,7 +416,18 @@ public class VolunteerGUI extends JFrame{
     			
     			c2.prepareEvent(e4, startTime4, stopTime4);
     			
-    			
+             m1.setTitle("Message 1");
+             m1.setFromField(c1);
+             m1.setBody("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+
+             v1.addMessageToInbox(m1);
+
+             m2.setTitle("Message 2 with event");
+             m2.setEvent(e1);
+             m2.setFromField(c1);
+             m2.setBody("Hello this is the second message this one has an event attached for your convenience");
+
+             v1.addMessageToInbox(m2);
     			//v1.joinEvent(e1);        // This one is good
     			v3.joinEvent(e1); 		 // This one is good
 
