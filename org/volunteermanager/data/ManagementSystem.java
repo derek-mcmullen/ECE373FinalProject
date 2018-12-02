@@ -89,9 +89,12 @@ public class ManagementSystem {
 		}
 		
 		for (Event evt : evts) { 
-			results += "Title:    " + evt.getTitle() + "\n";
-			results += "Location: " + evt.getLocation() + "\n"; 
-			results += "Comments: " + evt.getExtraInfo() + "\n\n"; 
+			results += "Title:       " + evt.getTitle() + "\n";
+			results += "Starting at: " + evt.getTime().getStartTime() + "\n"; 
+			results += "Ending at:   " + evt.getTime().getStopTime() + "\n"; 
+			results += "Location:    " + evt.getLocation() + "\n"; 
+			results += "Comments:    " + evt.getExtraInfo() + "\n\n"; 
+			
 		}
 		
 		if (results.equals("")) { 
