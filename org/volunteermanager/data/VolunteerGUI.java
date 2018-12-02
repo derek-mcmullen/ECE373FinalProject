@@ -16,6 +16,7 @@ public class VolunteerGUI extends JFrame{
 	// Instance of a management system
 	private ManagementSystem ms; 
 	private Volunteer loggedInUser; 
+	private Coordinator loggedInCoord; 
 	
 	// Buttons
 	private JButton submitCreate; 
@@ -44,9 +45,12 @@ public class VolunteerGUI extends JFrame{
 	private JScrollPane scrollPane; 
 	
 	 
-    public VolunteerGUI(Volunteer currentUser) {
+    public VolunteerGUI() {
     	ms = new ManagementSystem(); 
-    	loggedInUser = currentUser; 
+    	loggedInUser = new Volunteer(); 
+    	loggedInUser.setName("TestUser");
+    	loggedInCoord = new Coordinator();
+    	loggedInCoord.setName("TestCoord");
     	
     	// GUI Title and size
     	setTitle("Volunteer Management System"); 
@@ -98,6 +102,7 @@ public class VolunteerGUI extends JFrame{
 	    eventLocation = new JTextField();
 	    eventInfo = new JTextField();
 	    eventCoord = new JTextField(); 
+	    eventCoord.setText(loggedInCoord.getName());
 	    startTime = new JTextField(); 
 	    stopTime = new JTextField(); 
 	    skill1 = new JRadioButton(); 
@@ -111,7 +116,7 @@ public class VolunteerGUI extends JFrame{
 	    
 	    // Skills options
 	    JPanel skillsPanel = new JPanel(new GridLayout(4,2));
-	    skillsPanel.setAlignmentX(RIGHT_ALIGNMENT);
+	    skillsPanel.setAlignmentX(RIGHT_ALIGNMENT); 
 	    skillsPanel.add(skill1); 
 	    skillsPanel.add(new JLabel("Power Tools"));
 	    skillsPanel.add(skill2); 
@@ -220,6 +225,7 @@ public class VolunteerGUI extends JFrame{
   
     	toAdd.setTime(ts);
     	toAdd.setTitle(eName);
+    	toAdd.setCoordinator(loggedInCoord);
     	toAdd.setEventId(ms.getEvents().size()+1);
     	toAdd.setLocation(eLocation);
     	toAdd.addExtraInfo(eInfo);
@@ -248,8 +254,8 @@ public class VolunteerGUI extends JFrame{
         	toAdd.addInterestCategory("Children");
     	}
 
+    	// Add the event to the managementSystem instance
 		ms.addEvent(toAdd);
-    	loggedInUser.joinEvent(toAdd); 
 		
 		JOptionPane.showMessageDialog(null, "Event Created!", "Results", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -258,13 +264,12 @@ public class VolunteerGUI extends JFrame{
     	String msgArea = ms.getEventsByUserAsString(loggedInUser); 
     	JTextArea textArea = new JTextArea(msgArea);
 		scrollPane.setViewportView(textArea);
-		
     }
     
     
     public static void main (String []args) {
     	Volunteer aUser = new Volunteer(); 
-    	VolunteerGUI tab = new VolunteerGUI(aUser); 
+    	VolunteerGUI tab = new VolunteerGUI(); 
     }
     
     

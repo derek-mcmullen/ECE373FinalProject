@@ -93,7 +93,7 @@ public class ManagementSystem {
 			results += "Starting at: " + evt.getTime().getStartTime() + "\n"; 
 			results += "Ending at:   " + evt.getTime().getStopTime() + "\n"; 
 			results += "Location:    " + evt.getLocation() + "\n"; 
-			results += "Comments:    " + evt.getExtraInfo() + "\n\n"; 
+			results += "Comments:    " + evt.getExtraInfo().get(1) + "\n\n"; 
 			
 		}
 		
