@@ -75,6 +75,31 @@ public class ManagementSystem {
 		}
 		return eventsByInterest; 
 	}
+	
+	public String getEventsByUserAsString(Volunteer aVol) { 
+		String results = ""; 
+		ArrayList<Event> evts = new ArrayList<Event>(); 
+		
+		for (Event evt : events) { 
+			for (Volunteer vol : evt.getRoster() ) { 
+				if (aVol.equals(vol)) { 
+					evts.add(evt); 
+				}
+			}
+		}
+		
+		for (Event evt : evts) { 
+			results += "Title:    " + evt.getTitle() + "\n";
+			results += "Location: " + evt.getLocation() + "\n"; 
+			results += "Comments: " + evt.getExtraInfo() + "\n\n"; 
+		}
+		
+		if (results.equals("")) { 
+			results = "No Currently Enrolled Events!"; 
+		}
+		
+		return results; 
+	}
 
 	
 	
