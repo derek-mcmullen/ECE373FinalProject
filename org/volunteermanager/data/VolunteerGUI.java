@@ -6,6 +6,7 @@ import java.util.Date;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import org.volunteermanager.data.*;
 import org.volunteermanager.data.Event;
 import org.volunteermanager.people.*;
@@ -13,7 +14,7 @@ import org.volunteermanager.people.*;
 
 public class VolunteerGUI extends JFrame{
 	 
-    public VolunteerGUI(ManagementSystem ms1, User loggedIn ) {
+    public VolunteerGUI(ManagementSystem ms1, User currentUser ) {
     	
     	
     	// GUI Title and size
@@ -30,16 +31,20 @@ public class VolunteerGUI extends JFrame{
     	// List of all tabs to be populated
     	JPanel joinPanel = new JPanel(new GridLayout(0,2, 0,15));
     	JScrollPane joinPane =new JScrollPane( joinPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,  JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    	joinPane.setPreferredSize(new Dimension(500,500));
+      joinPane.setPreferredSize(new Dimension(500,500));
+
+      JPanel eventsPanel = new JPanel(new GridLayout(0,2, 0,15));
+      JScrollPane eventsPane =new JScrollPane( eventsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,  JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+      eventsPane.setPreferredSize(new Dimension(500,500));
+
     	JPanel createPanel = new JPanel(new GridLayout(4, 2));
-    	JPanel eventsPanel = new JPanel();
     	JPanel profilePanel = new JPanel();
     	JPanel messagingPanel = new JPanel(); 
     		
     	// Adding the tabs to the navbar
     	jtp.addTab("Join Events", joinPane);
     	jtp.addTab("Create Events", createPanel);
-    	jtp.addTab("My Events", eventsPanel);
+    	jtp.addTab("My Events", eventsPane);
     	jtp.addTab("View Profile", profilePanel);
     	jtp.addTab("Messaging", messagingPanel);
     	
@@ -47,9 +52,9 @@ public class VolunteerGUI extends JFrame{
     	
     	// Join panel implementation 
     	for(Event e: ms1.getEvents()) {
-    		if(!loggedIn.getEvents().contains(e)) {
+    		if(!currentUser.getEvents().contains(e)) {
 	    		JTextArea label = new JTextArea();
-		    	JButton join = new JButton("Join Me");
+		    	JButton join = new JButton("Join");
 		    	JButton info = new JButton("More Info");
 		    	JPanel buttonContainer = new JPanel();
 		    	
@@ -58,12 +63,16 @@ public class VolunteerGUI extends JFrame{
 		    	label.setWrapStyleWord(true);
 		    	label.setEditable(false);
 		    	label.setFocusable(false);
-		    	label.setOpaque(false);
-		    	
-		    	info.addActionListener(new infoHandler(e, loggedIn ));
-            join.addActionListener(new joinHandler(e, loggedIn ));
+             label.setOpaque(false);
+             //label.setPreferredSize(new Dimension(0,20));
+             label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+             label.setMaximumSize(new Dimension(0,20));
+
+		    	buttonContainer.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+		    	info.addActionListener(new infoHandler(e, currentUser ));
+            join.addActionListener(new joinHandler(e, currentUser ));
              
-		    	joinPanel.add(label);
+             joinPanel.add(label);
 		    	buttonContainer.add(join);
 		    	buttonContainer.add(info);
 		    	joinPanel.add(buttonContainer);
@@ -95,10 +104,47 @@ public class VolunteerGUI extends JFrame{
     	JButton test = new JButton("Send Message");
     	messagingPanel.add(test);
 
-    	test.addActionListener(bhandler);
+      test.addActionListener(bhandler);
+       
+       // Events panel implementation 
+      jtp.addChangeListener(new ChangeListener() {
+         public void stateChanged(ChangeEvent Ce) {
+
+            if(jtp.getSelectedIndex()==jtp.indexOfComponent(eventsPane)) //Index starts at 0, so Index 2 = Tab3
+            {
+               eventsPanel.removeAll();
+               for(Event e: currentUser.getEvents()) {
+                  JTextArea label = new JTextArea();
+                      JButton leave = new JButton("Leave");
+                      JButton info = new JButton("More Info");
+                      JPanel buttonContainer = new JPanel();
+                      
+                      label.setText(e.getTitle());
+                      label.setLineWrap(true);
+                      label.setWrapStyleWord(true);
+                      label.setEditable(false);
+                      label.setFocusable(false);
+                      label.setOpaque(false);
+                      label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+                      label.setMaximumSize(new Dimension(0,20));
+         
+                      buttonContainer.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+                      //info.addActionListener(new infoHandler(e, currentUser ));
+                      //leave.addActionListener(new leaveHandler(e, currentUser ));
+                      
+                      eventsPanel.add(label);
+                      buttonContainer.add(leave);
+                      buttonContainer.add(info);
+                      eventsPanel.add(buttonContainer);
+               }
+               eventsPanel.revalidate();
+               eventsPanel.repaint();
+            }
+        }
+      });
     	setVisible(true);
     	
-    
+       
     }
     class infoHandler implements ActionListener{
     	private Event event;
@@ -175,7 +221,7 @@ public class VolunteerGUI extends JFrame{
          else{
           JOptionPane.showMessageDialog(null, "You are a coordinator.\nOnly volunteers can join events.", "Error", JOptionPane.ERROR_MESSAGE);
          }
-      }
+      } 
     }
     class ButtonHandler implements ActionListener{
     	public void actionPerformed(ActionEvent e){
@@ -325,19 +371,19 @@ public class VolunteerGUI extends JFrame{
     			c2.prepareEvent(e4, startTime4, stopTime4);
     			
     			
-    			v1.joinEvent(e1);        // This one is good
+    			//v1.joinEvent(e1);        // This one is good
     			v3.joinEvent(e1); 		 // This one is good
 
     			v4.joinEvent(e2);        // This one is good
     			
     			v1.joinEvent(e3);		
-    			//v2.joinEvent(e3); 
+    			v2.joinEvent(e3); 
     			v3.joinEvent(e3);
     			//v4.joinEvent(e3);
     			
     			v4.joinEvent(e4);        // This one is good	
 
-    	VolunteerGUI tab = new VolunteerGUI(ms1, v2); 
+    	VolunteerGUI tab = new VolunteerGUI(ms1, v1); 
     }
     
     
