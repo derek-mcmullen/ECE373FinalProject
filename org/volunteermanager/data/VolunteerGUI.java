@@ -103,6 +103,10 @@ public class VolunteerGUI extends JFrame{
     	
 	    
       // Messaging panel implementation 
+      JButton compose = new JButton("Compose New Message");
+       compose.addActionListener(new composeHandler(currentUser, ms1));
+       messagingPanel.add(compose);
+       messagingPanel.add(new JLabel());
       for(Message m: currentUser.getInbox()){
          JTextArea label = new JTextArea();
          JButton info = new JButton("Open");
@@ -269,6 +273,53 @@ public class VolunteerGUI extends JFrame{
          JOptionPane.showMessageDialog(null, label, message.getTitle(), JOptionPane.INFORMATION_MESSAGE);
       }
     }
+    class composeHandler implements ActionListener{
+       private User currentUser;
+       private ManagementSystem ms;
+       composeHandler(User u, ManagementSystem MS){
+         this.currentUser = u;
+         this.ms=MS;
+       }
+       public void actionPerformed(ActionEvent e){
+         JTextField toField = new JTextField(10);
+         JTextField titleField = new JTextField(10);
+         JTextArea bodyField = new JTextArea(null, 5, 25);
+         bodyField.setLineWrap(true);
+         bodyField.setWrapStyleWord(true);
+          JPanel composer=new JPanel(new SpringLayout());
+          composer.add(new JLabel("To:"));
+          composer.add(toField);
+          composer.add(new JLabel("Title:"));
+          composer.add(titleField);
+          composer.add(new JLabel("Body:"));
+          composer.add(bodyField);
+          SpringUtilities.makeCompactGrid(composer,
+                                        3, 2, //rows, cols
+                                        6, 6,        //initX, initY
+                                        6, 6);       //xPad, yPad
+         Object[] options = {"Send", "Cancel"};
+         int n = JOptionPane.showOptionDialog(null, composer, "Compose Message" , JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE ,null, options, options[0]);
+         if(n==0){
+            Message message = new Message();
+            message.setBody(bodyField.getText());
+            message.setFromField(currentUser);
+            boolean found = false;
+            for (User u:ms.getUsers()){
+               if(u.getUserName().compareTo(toField.getText())==0){
+                  message.addToField(u);
+                  found = true;
+               }
+            }
+            if(!found){
+               JOptionPane.showMessageDialog(null, "Could not find user with userName "+toField.getText(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            else{
+               message.sendMessageToAddressed();
+               JOptionPane.showMessageDialog(null, "Message Sent"+toField.getText(), "Message Sent", JOptionPane.INFORMATION_MESSAGE);
+            }
+         }
+       }
+    }
     class ButtonHandler implements ActionListener{
     	public void actionPerformed(ActionEvent e){
     		 JOptionPane.showMessageDialog(null, "I've been pressed", "What happened?", JOptionPane.INFORMATION_MESSAGE);
@@ -428,6 +479,16 @@ public class VolunteerGUI extends JFrame{
              m2.setBody("Hello this is the second message this one has an event attached for your convenience");
 
              v1.addMessageToInbox(m2);
+             v1.addMessageToInbox(m2);
+             v1.addMessageToInbox(m2);
+             v1.addMessageToInbox(m2);
+             v1.addMessageToInbox(m2);
+             v1.addMessageToInbox(m2);
+             v1.addMessageToInbox(m2);
+             v1.addMessageToInbox(m2);
+             v1.addMessageToInbox(m2);
+             v1.addMessageToInbox(m2);
+             v1.addMessageToInbox(m2);
     			//v1.joinEvent(e1);        // This one is good
     			v3.joinEvent(e1); 		 // This one is good
 
@@ -438,7 +499,15 @@ public class VolunteerGUI extends JFrame{
     			v3.joinEvent(e3);
     			//v4.joinEvent(e3);
     			
-    			v4.joinEvent(e4);        // This one is good	
+             v4.joinEvent(e4);        // This one is good	
+             ms1.addUser(c1);
+             ms1.addUser(c2);
+             ms1.addUser(c3);
+
+             ms1.addUser(v1);
+             ms1.addUser(v2);
+             ms1.addUser(v3);
+             ms1.addUser(v4);
 
     	VolunteerGUI tab = new VolunteerGUI(ms1, v1); 
     }
