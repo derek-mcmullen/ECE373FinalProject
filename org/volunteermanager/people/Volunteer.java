@@ -139,5 +139,21 @@ public class Volunteer extends User {
 		}
 		return isEnrolled; 
 	}
-
+   public boolean leaveEventGUI(Event aEvent) { 
+		boolean isEnrolled = false; 
+		
+		for ( Event evt : this.getEvents() ) { 
+			if (evt.equals(aEvent)) { 
+				isEnrolled = true; 
+			}
+		}
+		
+		if (isEnrolled) { 
+         this.events.remove(aEvent); 
+         JOptionPane.showMessageDialog(null, "You have left event: "+aEvent.getTitle()+".\n", "Success", JOptionPane.PLAIN_MESSAGE);
+		} else { 
+         JOptionPane.showMessageDialog(null, "You cannot leave '" + aEvent.getTitle() + "' because you are not signed up for it!", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		return isEnrolled; 
+	}
 }

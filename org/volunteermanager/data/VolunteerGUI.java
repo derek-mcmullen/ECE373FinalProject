@@ -158,7 +158,7 @@ public class VolunteerGUI extends JFrame{
          
                       buttonContainer.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
                       //info.addActionListener(new infoHandler(e, currentUser ));
-                      //leave.addActionListener(new leaveHandler(e, currentUser ));
+                      leave.addActionListener(new leaveHandler(e, currentUser ));
                       
                       eventsPanel.add(label);
                       buttonContainer.add(leave);
@@ -251,6 +251,54 @@ public class VolunteerGUI extends JFrame{
          }
       } 
     }
+    class leaveHandler implements ActionListener{
+      private Event e;
+      private User currentUser;
+
+      public leaveHandler(Event e, User loggedIn){
+         this.e=e;
+         this.currentUser=loggedIn;
+      }
+
+      public void actionPerformed(ActionEvent ae){
+         if(currentUser.getClass()==Volunteer.class){
+            Volunteer loggedIn =(Volunteer) currentUser;
+            loggedIn.leaveEventGUI(e);
+            JPanel eventsPanel = (JPanel)((JButton)ae.getSource()).getParent().getParent();
+            eventsPanel.removeAll();
+               for(Event e: currentUser.getEvents()) {
+                  JTextArea label = new JTextArea();
+                      JButton leave = new JButton("Leave");
+                      JButton info = new JButton("More Info");
+                      JPanel buttonContainer = new JPanel();
+                      
+                      label.setText(e.getTitle());
+                      label.setLineWrap(true);
+                      label.setWrapStyleWord(true);
+                      label.setEditable(false);
+                      label.setFocusable(false);
+                      label.setOpaque(false);
+                      label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+                      label.setMaximumSize(new Dimension(0,20));
+         
+                      buttonContainer.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+                      //info.addActionListener(new infoHandler(e, currentUser ));
+                      leave.addActionListener(new leaveHandler(e, currentUser ));
+                      
+                      eventsPanel.add(label);
+                      buttonContainer.add(leave);
+                      buttonContainer.add(info);
+                      eventsPanel.add(buttonContainer);
+               }
+               eventsPanel.revalidate();
+               eventsPanel.repaint();
+         }
+         else{
+            JOptionPane.showMessageDialog(null, "You are a coordinator.\nOnly volunteers can leave events.", "Error", JOptionPane.ERROR_MESSAGE);
+         }
+         
+      }
+   }
     class messageHandler implements ActionListener{
        Message message;
       public messageHandler(Message m){
