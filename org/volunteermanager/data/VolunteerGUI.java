@@ -168,6 +168,39 @@ public class VolunteerGUI extends JFrame{
                eventsPanel.revalidate();
                eventsPanel.repaint();
             }
+            if(jtp.getSelectedIndex()==jtp.indexOfComponent(joinPane)) //Index starts at 0, so Index 2 = Tab3
+            {
+               joinPanel.removeAll();
+               for(Event e: ms1.getEvents()) {
+                  if(!currentUser.getEvents().contains(e)) {
+                     JTextArea label = new JTextArea();
+                     JButton join = new JButton("Join");
+                     JButton info = new JButton("More Info");
+                     JPanel buttonContainer = new JPanel();
+                     
+                     label.setText(e.getTitle());
+                     label.setLineWrap(true);
+                     label.setWrapStyleWord(true);
+                     label.setEditable(false);
+                     label.setFocusable(false);
+                     label.setOpaque(false);
+                     //label.setPreferredSize(new Dimension(0,20));
+                     label.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+                     label.setMaximumSize(new Dimension(0,20));
+        
+                     buttonContainer.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
+                     info.addActionListener(new infoHandler(e, currentUser ));
+                    join.addActionListener(new joinHandler(e, currentUser ));
+                     
+                     joinPanel.add(label);
+                     buttonContainer.add(join);
+                     buttonContainer.add(info);
+                     joinPanel.add(buttonContainer);
+                  }
+               }
+               joinPanel.revalidate();
+               joinPanel.repaint();
+            }
         }
       });
     	setVisible(true);
