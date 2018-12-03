@@ -157,7 +157,7 @@ public class VolunteerGUI extends JFrame{
                       label.setMaximumSize(new Dimension(0,20));
          
                       buttonContainer.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.gray));
-                      //info.addActionListener(new infoHandler(e, currentUser ));
+                      info.addActionListener(new infoHandler2(e, currentUser ));
                       leave.addActionListener(new leaveHandler(e, currentUser ));
                       
                       eventsPanel.add(label);
@@ -251,6 +251,40 @@ public class VolunteerGUI extends JFrame{
          }
       } 
     }
+    class infoHandler2 implements ActionListener{
+      private Event event;
+      private User user;
+      public infoHandler2(Event e, User u) {
+         this.event=e;
+         this.user=u;
+      }
+      public void actionPerformed(ActionEvent a){
+          String info =event.getTitle()+"\n";
+          info += "Location: "+event.getLocation()+"\n";
+          info += "Coordinator: "+event.getCoordinator().getName()+"\n";
+          info += "Begins: "+event.getTime().getStartTime()+"\n";
+          info += "Ends: "+event.getTime().getStopTime()+"\n";
+          info += "Info: \n";
+          for(String more:event.getExtraInfo()) {
+             info += "     "+more +"\n";
+          }
+          info += "Required Skills: \n";
+          for(String skill:event.getRequiredSkills()) {
+             info += "     "+skill +"\n";
+          }
+          Object[] options = {"Leave", "Cancel"};
+          int n = JOptionPane.showOptionDialog(null, info, event.getTitle() +" info" , JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE ,null, options, options[0]);
+          if(n == JOptionPane.YES_OPTION) {
+             if(user.getClass() ==  Volunteer.class) {
+                Volunteer v = (Volunteer) user;
+                v.leaveEventGUI(event);
+             }
+             else{
+              JOptionPane.showMessageDialog(null, "You are a coordinator.\nOnly volunteers can leave events.", "Error", JOptionPane.ERROR_MESSAGE);
+             }
+          }
+      }
+   }
     class leaveHandler implements ActionListener{
       private Event e;
       private User currentUser;

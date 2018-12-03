@@ -150,7 +150,7 @@ public class Volunteer extends User {
 		
 		if (isEnrolled) { 
          this.events.remove(aEvent); 
-         JOptionPane.showMessageDialog(null, "You have left event: "+aEvent.getTitle()+".\n", "Success", JOptionPane.PLAIN_MESSAGE);
+         JOptionPane.showMessageDialog(null, "You have left event: "+aEvent.getTitle()+".\n You may have to refresh the tab to see changes", "Success", JOptionPane.PLAIN_MESSAGE);
 		} else { 
          JOptionPane.showMessageDialog(null, "You cannot leave '" + aEvent.getTitle() + "' because you are not signed up for it!", "Error", JOptionPane.ERROR_MESSAGE);
 		}
